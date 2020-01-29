@@ -1,0 +1,20 @@
+server:
+  port: 5670
+
+spring:
+  application:
+    name: fsdr-report-writer
+  datasource:
+    url: jdbc:postgresql://localhost/postgres?currentSchema=fsdr
+    driver-class-name: org.postgresql.Driver
+#    schema: classpath:/schema.sql
+    continue-on-error: false
+    username: postgres
+    password: postgres
+    initialization-mode: always
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
