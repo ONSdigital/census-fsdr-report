@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost/postgres?currentSchema=fsdr
     driver-class-name: org.postgresql.Driver
-#    schema: classpath:/schema.sql
+    schema: classpath:/schema.sql
     continue-on-error: false
     username: postgres
     password: postgres
