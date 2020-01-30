@@ -18,7 +18,12 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
+	if (!project.hasProperty('omitSDCArtifactory')) {
+		maven { url 'http://artifactory-sdc.onsdigital.uk/artifactory/libs-release-local' }
+		maven { url 'http://artifactory-sdc.onsdigital.uk/artifactory/libs-snapshot-local' }
+	}
 }
 
 dependencies {
@@ -32,4 +37,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+	compile('uk.gov.ons.census.fwmt:census-fwmt-events:1.0.13-RELEASE') {
+		exclude group: 'com.fasterxml.jackson.dataformat', module: 'jackson-dataformat-xml'
+	}
 }

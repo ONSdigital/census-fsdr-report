@@ -8,12 +8,13 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class eventQueueConfig {
+    public static final String EVENTS_QUEUE = "report.events";
 
   @Bean
   public AmqpAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
@@ -22,16 +23,16 @@ public class eventQueueConfig {
 
   @Bean
   public Queue eventQueue() {
-    return QueueBuilder.durable("report.events").build();
-  }
-
-  @Bean
-  public FanoutExchange eventExchange() {
-    return new FanoutExchange("Gateway.Events.Exchange");
+    return QueueBuilder.durable(EVENTS_QUEUE).build();
   }
 
   @Bean
   public Binding eventBinding(Queue queue, FanoutExchange fanoutExchange) {
     return BindingBuilder.bind(queue).to(fanoutExchange);
   }
+
+//  @Bean
+//  public Jackson2JsonMessageConverter messageConverter() {
+//    return new Jackson2JsonMessageConverter();
+//  }
 }
