@@ -11,10 +11,15 @@ spring:
     continue-on-error: false
     username: postgres
     password: postgres
-    initialization-mode: always
+    initialization-mode: never
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
     virtual-host: /
+logging:
+  level:
+    org.springframework.amqp: trace
+    org.hibernate: WARN
+

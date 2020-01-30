@@ -1,4 +1,4 @@
-package uk.gov.ons.fsdr.report;
+package uk.gov.ons.fsdr.report.entity;
 
 import lombok.Data;
 
