@@ -25,6 +25,18 @@ public class Report {
     @Column(name = "ingest_time")
     private LocalDateTime ingestTime;
 
+    @Column(name = "adecco_create_start")
+    private LocalDateTime adeccoCreateStart;
+
+    @Column(name = "adecco_create_complete")
+    private LocalDateTime adeccoCreateComplete;
+
+    @Column(name = "nisra_create_start")
+    private LocalDateTime nisraCreateStart;
+
+    @Column(name = "nisra_create_complete")
+    private LocalDateTime nisraCreateComplete;
+
     @Column(name = "actions_start")
     private LocalDateTime actionsStart;
 
@@ -33,6 +45,12 @@ public class Report {
 
     @Column(name = "action_type")
     private String actionType;
+
+    @Column(name = "gsuite_action_start")
+    private LocalDateTime gsuiteActionStart;
+
+    @Column(name = "gsuite_action_complete")
+    private LocalDateTime gsuiteActionComplete;
 
     @Column(name = "gsuite_create_start")
     private LocalDateTime gsuiteCreateStart;

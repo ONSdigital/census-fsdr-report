@@ -1,4 +1,4 @@
-create table fsdr.report
+create table if not exists fsdr.report
 (
     unique_employee_id                varchar(255) not null
         constraint report_pkey
@@ -6,9 +6,15 @@ create table fsdr.report
     start_time                        timestamp,
     job_title                         varchar,
     ingest_time                       timestamp,
+    adecco_create_start               timestamp,
+    adecco_create_complete            timestamp,
+    nisra_create_start                timestamp,
+    nisra_create_complete             timestamp,
     actions_start                     timestamp,
     actions_complete                  timestamp,
     action_type                       varchar,
+    gsuite_action_start               timestamp,
+    gsuite_action_complete            timestamp,
     gsuite_create_start               timestamp,
     gsuite_create_complete            timestamp,
     gsuite_area_group_start           timestamp,
