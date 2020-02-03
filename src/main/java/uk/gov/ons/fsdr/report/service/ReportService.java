@@ -27,12 +27,10 @@ public class ReportService {
     System.out.println(event.toString());
 
     String caseId = event.getCaseId();
-    if (!caseId.equals("<N/A>")) {
-      reportRepository.findById(caseId).ifPresentOrElse(
-          rep -> updateReport(rep, event),
-          () -> newReport(event)
-      );
-    }
+    reportRepository.findById(caseId).ifPresentOrElse(
+        rep -> updateReport(rep, event),
+        () -> newReport(event)
+    );
 
   }
 
@@ -44,72 +42,113 @@ public class ReportService {
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
     String ts = gatewayEventDTO.getMetadata().get("TS");
+    final LocalDateTime eventTime = LocalDateTime.parse(ts);
     switch (gatewayEventDTO.getEventType()) {
     case "GSUITE_ACTION_STARTED":
-      report.setGsuiteActionStart(LocalDateTime.parse(ts));
+      report.setGsuiteActionStart(eventTime);
       break;
     case "GSUITE_ACTION_COMPLETE":
-      report.setGsuiteActionComplete(LocalDateTime.parse(ts));
+      report.setGsuiteActionComplete(eventTime);
       break;
     case "GSUITE_USER_CREATE_STARTED":
-      report.setGsuiteCreateStart(LocalDateTime.parse(ts));
+      report.setGsuiteCreateStart(eventTime);
       break;
     case "GSUITE_USER_CREATED":
-      report.setGsuiteCreateComplete(LocalDateTime.parse(ts));
+      report.setGsuiteCreateComplete(eventTime);
       break;
     case "GSUITE_AREAGROUP_STARTED":
-      report.setGsuiteAreaGroupStart(LocalDateTime.parse(ts));
+      report.setGsuiteAreaGroupStart(eventTime);
       break;
     case "GSUITE_AREAGROUP_ADDED":
-      report.setGsuiteAreaGroupComplete(LocalDateTime.parse(ts));
+      report.setGsuiteAreaGroupComplete(eventTime);
       break;
     case "GSUITE_COORDGROUP_STARTED":
-      report.setGsuiteCoordinatorGroupStart(LocalDateTime.parse(ts));
+      report.setGsuiteCoordinatorGroupStart(eventTime);
       break;
     case "GSUITE_COORDGROUP_ADDED":
-      report.setGsuiteCoordinatorGroupComplete(LocalDateTime.parse(ts));
+      report.setGsuiteCoordinatorGroupComplete(eventTime);
       break;
     case "GSUITE_ALLUSERSGROUP_STARTED":
-      report.setGsuiteAllUserGroupStart(LocalDateTime.parse(ts));
+      report.setGsuiteAllUserGroupStart(eventTime);
       break;
     case "GSUITE_ALLUSERSGROUP_ADDED":
-      report.setGsuiteAllUserGroupComplete(LocalDateTime.parse(ts));
+      report.setGsuiteAllUserGroupComplete(eventTime);
       break;
     case "GSUITE_SURVEYTYPE_STARTED":
-      report.setGsuiteSurveyTypeGroupStart(LocalDateTime.parse(ts));
+      report.setGsuiteSurveyTypeGroupStart(eventTime);
       break;
     case "GSUITE_SURVEYTYPE_ADDED":
-      report.setGsuiteSurveyTypeGroupComplete(LocalDateTime.parse(ts));
+      report.setGsuiteSurveyTypeGroupComplete(eventTime);
       break;
     case "GSUITE_DRIVEGROUP_STARTED":
-      report.setGsuiteTeamDriveStart(LocalDateTime.parse(ts));
+      report.setGsuiteTeamDriveStart(eventTime);
       break;
     case "GSUITE_DRIVEGROUP_ADDED":
-      report.setGsuiteTeamDriveComplete(LocalDateTime.parse(ts));
+      report.setGsuiteTeamDriveComplete(eventTime);
       break;
     case "ADECCO_CREATION_STARTED":
-      report.setAdeccoCreateStart(LocalDateTime.parse(ts));
+      report.setAdeccoCreateStart(eventTime);
+      report.setIngestTime(eventTime);
+      break;
+    case "ADECCO_INGEST_STARTED":
+      report.setAdeccoCreateComplete(eventTime);
+      report.setStartTime(eventTime);
+      break;
+    case "ADECCO_INGEST_COMPLETE":
+      report.setAdeccoCreateStart(eventTime);
       break;
     case "ADECCO_CREATION_COMPLETE":
-      report.setAdeccoCreateComplete(LocalDateTime.parse(ts));
+      report.setAdeccoCreateComplete(eventTime);
       break;
     case "NISRA_CREATION_STARTED":
-      report.setNisraCreateStart(LocalDateTime.parse(ts));
+      report.setNisraCreateEmployeeStart(eventTime);
+      report.setIngestTime(eventTime);
       break;
     case "NISRA_CREATION_COMPLETE":
-      report.setNisraCreateComplete(LocalDateTime.parse(ts));
+      report.setNisraCreateEmployeeComplete(eventTime);
       break;
     case "SERVICENOW_ACTION_STARTED":
-      report.setSnowStart(LocalDateTime.parse(ts));
+      report.setSnowStart(eventTime);
       break;
     case "SERVICENOW_ACTION_COMPLETE":
-      report.setSnowComplete(LocalDateTime.parse(ts));
+      report.setSnowComplete(eventTime);
       break;
     case "XMA_ACTION_STARTED":
-      report.setXmaStart(LocalDateTime.parse(ts));
+      report.setXmaStart(eventTime);
       break;
     case "XMA_ACTION_COMPLETE":
-      report.setXmaComplete(LocalDateTime.parse(ts));
+      report.setXmaComplete(eventTime);
+      break;
+    case "FSDR_PROCESSES_ACTIONS_STARTED":
+      report.setActionsStart(eventTime);
+      break;
+    case "FSDR_PROCESSES_ACTIONS_COMPLETE":
+      report.setActionsComplete(eventTime);
+      break;
+    case "NISRA_EXTRACT_STARTED":
+      report.setNisraExtractStart(eventTime);
+      break;
+    case "NISRA_EXTRACT_COMPLETE":
+      report.setNisraExtractComplete(eventTime);
+      break;
+    case "LWS_EXTRACT_STARTED":
+      report.setLwsStart(eventTime);
+      break;
+    case "LWS_EXTRACT_COMPLETE":
+      report.setLwsComplete(eventTime);
+      break;
+    case "XMA_DEVICES_STARTED":
+      report.setXmaDevicesStart(eventTime);
+      break;
+    case "XMA_DEVICES_COMPLETE":
+      report.setXmaDevicesComplete(eventTime);
+      break;
+    case "NISRA_INGEST_STARTED":
+      report.setNisraIngestCsvStart(eventTime);
+      report.setStartTime(eventTime);
+      break;
+    case "NISRA_INGEST_COMPLETE":
+      report.setNisraIngestCsvComplete(eventTime);
       break;
     default:
       return;

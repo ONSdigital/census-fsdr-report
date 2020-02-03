@@ -5,7 +5,7 @@ spring:
   application:
     name: fsdr-report-writer
   datasource:
-    url: jdbc:postgresql://localhost/postgres?currentSchema=fsdr
+    url: jdbc:postgresql://localhost/postgres?currentSchema=report
     driver-class-name: org.postgresql.Driver
     schema: classpath:/schema.sql
     continue-on-error: false

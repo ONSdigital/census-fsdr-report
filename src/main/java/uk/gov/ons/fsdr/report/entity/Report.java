@@ -32,10 +32,22 @@ public class Report {
     private LocalDateTime adeccoCreateComplete;
 
     @Column(name = "nisra_create_start")
-    private LocalDateTime nisraCreateStart;
+    private LocalDateTime nisraCreateEmployeeStart;
 
     @Column(name = "nisra_create_complete")
-    private LocalDateTime nisraCreateComplete;
+    private LocalDateTime nisraCreateEmployeeComplete;
+
+    @Column(name = "nisra_ingest_csv_start")
+    private LocalDateTime nisraIngestCsvStart;
+
+    @Column(name = "nisra_ingest_csv_complete")
+    private LocalDateTime nisraIngestCsvComplete;
+
+    @Column(name = "nisra_extract_start")
+    private LocalDateTime nisraExtractStart;
+
+    @Column(name = "nisra_extract_complete")
+    private LocalDateTime nisraExtractComplete;
 
     @Column(name = "actions_start")
     private LocalDateTime actionsStart;
@@ -57,6 +69,18 @@ public class Report {
 
     @Column(name = "gsuite_create_complete")
     private LocalDateTime gsuiteCreateComplete;
+
+    @Column(name = "gsuite_update_start")
+    private LocalDateTime gsuiteUpdateStart;
+
+    @Column(name = "gsuite_update_complete")
+    private LocalDateTime gsuiteUpdateComplete;
+
+    @Column(name = "gsuite_suspend_start")
+    private LocalDateTime gsuiteSuspendStart;
+
+    @Column(name = "gsuite_suspend_complete")
+    private LocalDateTime gsuiteSuspendComplete;
 
     @Column(name = "gsuite_area_group_start")
     private LocalDateTime gsuiteAreaGroupStart;
@@ -93,6 +117,12 @@ public class Report {
 
     @Column(name = "xma_complete")
     private LocalDateTime xmaComplete;
+
+    @Column(name = "xma_devices_start")
+    private LocalDateTime xmaDevicesStart;
+
+    @Column(name = "xma_devices_complete")
+    private LocalDateTime xmaDevicesComplete;
 
     @Column(name = "granby_start")
     private LocalDateTime granbyStart;
