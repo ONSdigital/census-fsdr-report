@@ -76,18 +76,6 @@ public class Report {
     @Column(name = "gsuite_create_complete")
     private LocalDateTime gsuiteCreateComplete;
 
-    @Column(name = "gsuite_update_start")
-    private LocalDateTime gsuiteUpdateStart;
-
-    @Column(name = "gsuite_update_complete")
-    private LocalDateTime gsuiteUpdateComplete;
-
-    @Column(name = "gsuite_suspend_start")
-    private LocalDateTime gsuiteSuspendStart;
-
-    @Column(name = "gsuite_suspend_complete")
-    private LocalDateTime gsuiteSuspendComplete;
-
     @Column(name = "gsuite_area_group_start")
     private LocalDateTime gsuiteAreaGroupStart;
 
@@ -147,12 +135,6 @@ public class Report {
 
     @Column(name = "rca_complete")
     private LocalDateTime rcaComplete;
-
-    @Column(name = "get_devices_start")
-    private LocalDateTime DevicesStart;
-
-    @Column(name = "get_devices_complete")
-    private LocalDateTime DevicesComplete;
 
     @Column(name = "lws_start")
     private LocalDateTime lwsStart;

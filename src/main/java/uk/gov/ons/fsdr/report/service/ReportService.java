@@ -42,7 +42,10 @@ public class ReportService {
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
     String ts = gatewayEventDTO.getMetadata().get("TS");
-    final LocalDateTime eventTime = LocalDateTime.parse(ts);
+    LocalDateTime eventTime = null;
+    if (ts != null) {
+      eventTime = LocalDateTime.parse(ts);
+    }
     switch (gatewayEventDTO.getEventType()) {
     case "GSUITE_ACTION_STARTED":
       report.setGsuiteActionStart(eventTime);

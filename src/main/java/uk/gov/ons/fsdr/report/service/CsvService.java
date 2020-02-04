@@ -5,16 +5,20 @@ import org.springframework.stereotype.Service;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.opencsv.CSVWriter;
+
 
 @Service
 public class CsvService {
 
   @Autowired ReportRepository reportRepository;
   
-  public String buildCsv() {
+  public String buildCsv() throws IOException {
     final Report nonEmployeeActionsTime = reportRepository.findById("<N/A>").orElseThrow();
     final List<Report> employeesTimes = reportRepository.findAllByUniqueEmployeeIdNot("<N/A>");
     List<String[]> csvRows = new ArrayList<>();
@@ -22,11 +26,19 @@ public class CsvService {
     for (Report employeesTime: employeesTimes) {
       csvRows.add(buildCsvRow(employeesTime, nonEmployeeActionsTime));
     }
-    return null;
+    return buildCsv(csvRows);
+  }
+
+  private String buildCsv(List<String[]> csvRows) throws IOException {
+    StringWriter writer = new StringWriter();
+    try (CSVWriter csvWriter = new CSVWriter(writer, ',','"', '\\', "\n")){
+      csvWriter.writeAll(csvRows);
+      return writer.toString();
+    }
   }
 
   private String[] buildCsvRow(Report employeesTime, Report actionsTime) {
-    String[] times = new String[47];
+    String[] times = new String[42];
     times[0] = employeesTime.getUniqueEmployeeId();
     times[1] = String.valueOf(employeesTime.getStartTime());
     times[2] = employeesTime.getJobTitle();
@@ -73,7 +85,7 @@ public class CsvService {
   }
 
   private String[] buildCsvHeaderRow() {
-    String[] header = new String[47];
+    String[] header = new String[42];
 
     header[0] = "employee ID";
     header[1] = "start time";
