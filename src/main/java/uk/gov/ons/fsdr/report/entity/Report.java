@@ -25,11 +25,17 @@ public class Report {
     @Column(name = "ingest_time")
     private LocalDateTime ingestTime;
 
-    @Column(name = "adecco_create_start")
-    private LocalDateTime adeccoCreateStart;
+    @Column(name = "adecco_create_employee_start")
+    private LocalDateTime adeccoCreateEmployeeStart;
 
-    @Column(name = "adecco_create_complete")
-    private LocalDateTime adeccoCreateComplete;
+    @Column(name = "adecco_create_employee_complete")
+    private LocalDateTime adeccoCreateEmployeeComplete;
+
+    @Column(name = "adecco_ingest_start")
+    private LocalDateTime adeccoIngestStart;
+
+    @Column(name = "adecco_ingest_complete")
+    private LocalDateTime adeccoIngestComplete;
 
     @Column(name = "nisra_create_start")
     private LocalDateTime nisraCreateEmployeeStart;

@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ComponentScan({"uk.gov.ons.census.fwmt.events", "uk.gov.ons.fsdr"})
-public class FsdrReportWriterApplication {
+public class FsdrReportApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FsdrReportWriterApplication.class, args);
+		SpringApplication.run(FsdrReportApplication.class, args);
 	}
 
 }

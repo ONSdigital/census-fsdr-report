@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: fsdr-report-writer
+    name: fsdr-report
   datasource:
     url: jdbc:postgresql://localhost/postgres?currentSchema=report
     driver-class-name: org.postgresql.Driver

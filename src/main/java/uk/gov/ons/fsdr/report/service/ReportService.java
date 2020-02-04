@@ -87,18 +87,18 @@ public class ReportService {
       report.setGsuiteTeamDriveComplete(eventTime);
       break;
     case "ADECCO_CREATION_STARTED":
-      report.setAdeccoCreateStart(eventTime);
+      report.setAdeccoCreateEmployeeStart(eventTime);
       report.setIngestTime(eventTime);
       break;
+    case "ADECCO_CREATION_COMPLETE":
+      report.setAdeccoCreateEmployeeComplete(eventTime);
+      break;
     case "ADECCO_INGEST_STARTED":
-      report.setAdeccoCreateComplete(eventTime);
+      report.setAdeccoIngestStart(eventTime);
       report.setStartTime(eventTime);
       break;
     case "ADECCO_INGEST_COMPLETE":
-      report.setAdeccoCreateStart(eventTime);
-      break;
-    case "ADECCO_CREATION_COMPLETE":
-      report.setAdeccoCreateComplete(eventTime);
+      report.setAdeccoIngestComplete(eventTime);
       break;
     case "NISRA_CREATION_STARTED":
       report.setNisraCreateEmployeeStart(eventTime);

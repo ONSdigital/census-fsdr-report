@@ -8,8 +8,10 @@ create table if not exists report.report
     start_time                        timestamp,
     job_title                         varchar,
     ingest_time                       timestamp,
-    adecco_create_start               timestamp,
-    adecco_create_complete            timestamp,
+    adecco_create_employee_start      timestamp,
+    adecco_create_employee_complete   timestamp,
+    adecco_ingest_start               timestamp,
+    adecco_ingest_complete            timestamp,
     nisra_create_start                timestamp,
     nisra_create_complete             timestamp,
     nisra_ingest_csv_start            timestamp,
@@ -47,8 +49,6 @@ create table if not exists report.report
     snow_complete                     timestamp,
     rca_start                         timestamp,
     rca_complete                      timestamp,
-    get_devices_start                 timestamp,
-    get_devices_complete              timestamp,
     lws_start                         timestamp,
     lws_complete                      timestamp
 );
