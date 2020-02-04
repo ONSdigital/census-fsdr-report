@@ -1,7 +1,6 @@
 package uk.gov.ons.fsdr.report.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 import uk.gov.ons.fsdr.report.service.CsvService;
-import uk.gov.ons.fsdr.report.service.ReportService;
 
 import java.io.IOException;
 
@@ -32,10 +30,10 @@ public class ReportController {
 
   @GetMapping(value = "/csv", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
   public @ResponseBody byte[] getCsv() {
-     String csv;
+    String csv;
     try {
       csv = csvService.buildCsv();
-    return csv.getBytes();
+      return csv.getBytes();
     } catch (IOException e) {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
