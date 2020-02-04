@@ -47,6 +47,9 @@ public class ReportService {
       eventTime = LocalDateTime.parse(ts);
     }
     switch (gatewayEventDTO.getEventType()) {
+    case "JOB_TYPE":
+      report.setJobTitle(gatewayEventDTO.getMetadata().get("JobRole Type"));
+      break;
     case "GSUITE_ACTION_STARTED":
       report.setGsuiteActionStart(eventTime);
       break;
@@ -152,6 +155,12 @@ public class ReportService {
       break;
     case "NISRA_INGEST_COMPLETE":
       report.setNisraIngestCsvComplete(eventTime);
+      break;
+    case "RCA_EXTRACT_STARTED":
+      report.setRcaStart(eventTime);
+      break;
+    case "RCA_EXTRACT_COMPLETE":
+      report.setRcaComplete(eventTime);
       break;
     default:
       return;
