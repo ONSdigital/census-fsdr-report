@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -62,7 +64,8 @@ public class Report {
   private LocalDateTime actionsComplete;
 
   @Column(name = "action_type")
-  private String actionType;
+  @Enumerated(EnumType.STRING)
+  private ActionType actionType;
 
   @Column(name = "gsuite_action_start")
   private LocalDateTime gsuiteActionStart;

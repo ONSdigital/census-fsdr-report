@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
+import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
@@ -161,6 +162,18 @@ public class ReportService {
       break;
     case "RCA_EXTRACT_COMPLETE":
       report.setRcaComplete(eventTime);
+      break;
+    case "CREATED_CREATE_ACTION":
+      report.setActionType(ActionType.CREATE);
+      break;
+    case "CREATED_UPDATE_ACTION":
+      report.setActionType(ActionType.UPDATE);
+      break;
+    case "CREATED_MOVER_ACTION":
+      report.setActionType(ActionType.MOVER);
+      break;
+    case "CREATED_LEAVER_ACTION":
+      report.setActionType(ActionType.LEAVER);
       break;
     default:
       return;
