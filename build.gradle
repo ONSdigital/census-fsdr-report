@@ -27,6 +27,8 @@ repositories {
 }
 
 dependencies {
+	compile("uk.gov.ons.census.fwmt:census-fwmt-events:1.0.17-RELEASE")
+
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -37,7 +39,4 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-	compile('uk.gov.ons.census.fwmt:census-fwmt-events:1.0.13-RELEASE') {
-		exclude group: 'com.fasterxml.jackson.dataformat', module: 'jackson-dataformat-xml'
-	}
 }
