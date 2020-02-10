@@ -6,10 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"uk.gov.ons.census.fwmt.events", "uk.gov.ons.fsdr"})
-public class FsdrReportApplication {
+public class Application {
+
+  public static final String APPLICATION_NAME = "FSDR - Report Service";
 
   public static void main(String[] args) {
-    SpringApplication.run(FsdrReportApplication.class, args);
+    SpringApplication.run(Application.class, args);
   }
 
 }
