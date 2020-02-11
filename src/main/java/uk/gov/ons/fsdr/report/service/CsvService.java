@@ -14,7 +14,8 @@ import java.util.List;
 @Service
 public class CsvService {
 
-  @Autowired ReportRepository reportRepository;
+  @Autowired
+  private ReportRepository reportRepository;
 
   public String buildCsv() throws IOException {
     final Report nonEmployeeActionsTime = reportRepository.findById("<N/A>").orElseThrow();
