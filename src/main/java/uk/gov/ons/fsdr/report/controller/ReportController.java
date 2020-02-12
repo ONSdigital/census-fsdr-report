@@ -18,12 +18,14 @@ import java.io.IOException;
 @RequestMapping("/report")
 public class ReportController {
 
-  @Autowired ReportRepository reportRepository;
+  @Autowired
+  private ReportRepository reportRepository;
 
-  @Autowired CsvService csvService;
+  @Autowired
+  private CsvService csvService;
 
   @GetMapping("/clearDB")
-  public ResponseEntity clearDatabase() {
+  public ResponseEntity<HttpStatus> clearDatabase() {
     reportRepository.deleteAll();
     return ResponseEntity.ok(HttpStatus.OK);
   }
