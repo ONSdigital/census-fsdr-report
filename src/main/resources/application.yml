@@ -20,6 +20,7 @@ spring:
     virtual-host: /
 logging:
   level:
+    uk.gov.ons.fsdr.report: DEBUG
     org.springframework.amqp: WARN
     org.hibernate: WARN
 

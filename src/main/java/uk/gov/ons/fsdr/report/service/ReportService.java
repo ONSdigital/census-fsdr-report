@@ -1,6 +1,6 @@
 package uk.gov.ons.fsdr.report.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
 @Service
 @RabbitListener(queues = EVENTS_QUEUE)
+@Slf4j
 public class ReportService {
 
   @Autowired
@@ -37,16 +38,9 @@ public class ReportService {
   public void readMessage(GatewayEventDTO event) {
 
     String caseId = event.getCaseId();
-    reportRepository.findById(caseId).ifPresentOrElse(
-        rep -> updateReport(rep, event),
-        () -> newReport(event)
-    );
-  }
-
-  private void newReport(GatewayEventDTO gatewayEventDTO) {
-    Report report = new Report();
-    report.setUniqueEmployeeId(gatewayEventDTO.getCaseId());
-    updateReport(report, gatewayEventDTO);
+    log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
+    Report report = reportRepository.findById(caseId).orElse(new Report(caseId));
+    updateReport(report, event);
   }
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
