@@ -165,6 +165,12 @@ public class ReportService {
     case "RCA_EXTRACT_COMPLETE":
       report.setRcaComplete(eventTime);
       break;
+    case "LOGISTICS_EXTRACT_STARTED":
+      report.setGranbyStart(eventTime);
+      break;
+    case "LOGISTICS_EXTRACT_COMPLETE":
+      report.setGranbyComplete(eventTime);
+      break;
     case "CREATED_CREATE_ACTION":
       report.setActionType(ActionType.CREATE);
       break;
