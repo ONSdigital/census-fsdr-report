@@ -1,23 +1,24 @@
 package uk.gov.ons.fsdr.report.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.ons.census.fwmt.events.component.GatewayEventManager;
+import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
 import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
 import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_CREATED;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
 @Service
+@RabbitListener(queues = EVENTS_QUEUE)
 public class ReportService {
 
   @Autowired
@@ -29,10 +30,14 @@ public class ReportService {
   @Autowired
   private GatewayEventManager gatewayEventManager;
 
-  @RabbitListener(queues = EVENTS_QUEUE)
-  public void readMessage(Message message) throws IOException {
-    GatewayEventDTO event = objectMapper.readValue(message.getBody(), GatewayEventDTO.class);
-    System.out.println(event.toString());
+  @RabbitHandler
+  public void readMessage(GatewayErrorEventDTO event) {
+    //this method is intentionally empty so that spring doesn't throw an exception
+    // when there is an GatewayErrorEventDTO message on the queue
+  }
+
+  @RabbitHandler
+  public void readMessage(GatewayEventDTO event) {
 
     String caseId = event.getCaseId();
     reportRepository.findById(caseId).ifPresentOrElse(
