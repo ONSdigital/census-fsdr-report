@@ -5,7 +5,6 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.gov.ons.census.fwmt.events.component.GatewayEventManager;
 import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
 import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
 import uk.gov.ons.fsdr.report.entity.ActionType;
@@ -14,7 +13,6 @@ import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
 import java.time.LocalDateTime;
 
-import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_CREATED;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
 @Service
@@ -24,9 +22,6 @@ public class ReportService {
 
   @Autowired
   private ReportRepository reportRepository;
-
-  @Autowired
-  private GatewayEventManager gatewayEventManager;
 
   @RabbitHandler
   public void readMessage(GatewayErrorEventDTO event) {
@@ -182,9 +177,6 @@ public class ReportService {
       break;
     case "CREATED_LEAVER_ACTION":
       report.setActionType(ActionType.LEAVER);
-      break;
-    case "FSDR_PROCESS_COMPLETE":
-      gatewayEventManager.triggerEvent("N/A", FSDR_REPORT_CREATED);
       break;
     default:
       return;
