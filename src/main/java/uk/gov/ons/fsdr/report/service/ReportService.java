@@ -22,9 +22,6 @@ import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 public class ReportService {
 
   @Autowired
-  private ObjectMapper objectMapper;
-
-  @Autowired
   private ReportRepository reportRepository;
 
   @Autowired
