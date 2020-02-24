@@ -1,6 +1,7 @@
 package uk.gov.ons.fsdr.report.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "report")
 @Data
+@NoArgsConstructor
 public class Report {
   @Id
   @Column(name = "unique_employee_id")
@@ -144,4 +146,8 @@ public class Report {
 
   @Column(name = "lws_complete")
   private LocalDateTime lwsComplete;
+
+  public Report(String uniqueEmployeeId) {
+    this.uniqueEmployeeId = uniqueEmployeeId;
+  }
 }

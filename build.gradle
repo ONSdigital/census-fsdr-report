@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-	compile("uk.gov.ons.census.fwmt:census-fwmt-events:1.0.17-RELEASE")
+	compile("uk.gov.ons.census.fwmt:census-fwmt-events:1.0.20-RELEASE")
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'

@@ -1,45 +1,41 @@
 package uk.gov.ons.fsdr.report.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.amqp.core.Message;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
 import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
 import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
 @Service
+@RabbitListener(queues = EVENTS_QUEUE)
+@Slf4j
 public class ReportService {
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private ReportRepository reportRepository;
 
-  @RabbitListener(queues = EVENTS_QUEUE)
-  public void readMessage(Message message) throws IOException {
-    GatewayEventDTO event = objectMapper.readValue(message.getBody(), GatewayEventDTO.class);
-    System.out.println(event.toString());
-
-    String caseId = event.getCaseId();
-    reportRepository.findById(caseId).ifPresentOrElse(
-        rep -> updateReport(rep, event),
-        () -> newReport(event)
-    );
+  @RabbitHandler
+  public void readMessage(GatewayErrorEventDTO event) {
+    //this method is intentionally empty so that spring doesn't throw an exception
+    // when there is an GatewayErrorEventDTO message on the queue
   }
 
-  private void newReport(GatewayEventDTO gatewayEventDTO) {
-    Report report = new Report();
-    report.setUniqueEmployeeId(gatewayEventDTO.getCaseId());
-    updateReport(report, gatewayEventDTO);
+  @RabbitHandler
+  public void readMessage(GatewayEventDTO event) {
+
+    String caseId = event.getCaseId();
+    log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
+    Report report = reportRepository.findById(caseId).orElse(new Report(caseId));
+    updateReport(report, event);
   }
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
@@ -163,6 +159,12 @@ public class ReportService {
       break;
     case "RCA_EXTRACT_COMPLETE":
       report.setRcaComplete(eventTime);
+      break;
+    case "LOGISTICS_EXTRACT_STARTED":
+      report.setGranbyStart(eventTime);
+      break;
+    case "LOGISTICS_EXTRACT_COMPLETE":
+      report.setGranbyComplete(eventTime);
       break;
     case "CREATED_CREATE_ACTION":
       report.setActionType(ActionType.CREATE);
