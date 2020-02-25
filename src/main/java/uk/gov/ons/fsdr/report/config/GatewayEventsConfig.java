@@ -8,12 +8,14 @@ import uk.gov.ons.fsdr.report.Application;
 @Configuration
 public class GatewayEventsConfig {
 
+  public static final String FSDR_REPORT_READY = "FSDR_REPORT_READY";
+
   @Bean
   public GatewayEventManager gatewayEventManager() {
     GatewayEventManager gatewayEventManager = new GatewayEventManager();
     gatewayEventManager.setSource(Application.APPLICATION_NAME);
     gatewayEventManager.addErrorEventTypes(new String[] {});
-    gatewayEventManager.addEventTypes(new String[] {});
+    gatewayEventManager.addEventTypes(new String[] {FSDR_REPORT_READY});
     return gatewayEventManager;
   }
 }

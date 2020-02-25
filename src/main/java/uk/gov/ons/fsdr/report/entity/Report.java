@@ -9,7 +9,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "report")
@@ -21,131 +20,131 @@ public class Report {
   private String uniqueEmployeeId;
 
   @Column(name = "start_time")
-  private LocalDateTime startTime;
+  private String startTime;
 
   @Column(name = "job_title")
   private String jobTitle;
 
   @Column(name = "ingest_time")
-  private LocalDateTime ingestTime;
+  private String ingestTime;
 
   @Column(name = "adecco_create_employee_start")
-  private LocalDateTime adeccoCreateEmployeeStart;
+  private String adeccoCreateEmployeeStart;
 
   @Column(name = "adecco_create_employee_complete")
-  private LocalDateTime adeccoCreateEmployeeComplete;
+  private String adeccoCreateEmployeeComplete;
 
   @Column(name = "adecco_ingest_start")
-  private LocalDateTime adeccoIngestStart;
+  private String adeccoIngestStart;
 
   @Column(name = "adecco_ingest_complete")
-  private LocalDateTime adeccoIngestComplete;
+  private String adeccoIngestComplete;
 
   @Column(name = "nisra_create_start")
-  private LocalDateTime nisraCreateEmployeeStart;
+  private String nisraCreateEmployeeStart;
 
   @Column(name = "nisra_create_complete")
-  private LocalDateTime nisraCreateEmployeeComplete;
+  private String nisraCreateEmployeeComplete;
 
   @Column(name = "nisra_ingest_csv_start")
-  private LocalDateTime nisraIngestCsvStart;
+  private String nisraIngestCsvStart;
 
   @Column(name = "nisra_ingest_csv_complete")
-  private LocalDateTime nisraIngestCsvComplete;
+  private String nisraIngestCsvComplete;
 
   @Column(name = "nisra_extract_start")
-  private LocalDateTime nisraExtractStart;
+  private String nisraExtractStart;
 
   @Column(name = "nisra_extract_complete")
-  private LocalDateTime nisraExtractComplete;
+  private String nisraExtractComplete;
 
   @Column(name = "actions_start")
-  private LocalDateTime actionsStart;
+  private String actionsStart;
 
   @Column(name = "actions_complete")
-  private LocalDateTime actionsComplete;
+  private String actionsComplete;
 
   @Column(name = "action_type")
   @Enumerated(EnumType.STRING)
   private ActionType actionType;
 
   @Column(name = "gsuite_action_start")
-  private LocalDateTime gsuiteActionStart;
+  private String gsuiteActionStart;
 
   @Column(name = "gsuite_action_complete")
-  private LocalDateTime gsuiteActionComplete;
+  private String gsuiteActionComplete;
 
   @Column(name = "gsuite_create_start")
-  private LocalDateTime gsuiteCreateStart;
+  private String gsuiteCreateStart;
 
   @Column(name = "gsuite_create_complete")
-  private LocalDateTime gsuiteCreateComplete;
+  private String gsuiteCreateComplete;
 
   @Column(name = "gsuite_area_group_start")
-  private LocalDateTime gsuiteAreaGroupStart;
+  private String gsuiteAreaGroupStart;
 
   @Column(name = "gsuite_area_group_complete")
-  private LocalDateTime gsuiteAreaGroupComplete;
+  private String gsuiteAreaGroupComplete;
 
   @Column(name = "gsuite_coordinator_group_start")
-  private LocalDateTime gsuiteCoordinatorGroupStart;
+  private String gsuiteCoordinatorGroupStart;
 
   @Column(name = "gsuite_coordinator_group_complete")
-  private LocalDateTime gsuiteCoordinatorGroupComplete;
+  private String gsuiteCoordinatorGroupComplete;
 
   @Column(name = "gsuite_all_user_group_start")
-  private LocalDateTime gsuiteAllUserGroupStart;
+  private String gsuiteAllUserGroupStart;
 
   @Column(name = "gsuite_all_user_group_complete")
-  private LocalDateTime gsuiteAllUserGroupComplete;
+  private String gsuiteAllUserGroupComplete;
 
   @Column(name = "gsuite_survey_type_group_start")
-  private LocalDateTime gsuiteSurveyTypeGroupStart;
+  private String gsuiteSurveyTypeGroupStart;
 
   @Column(name = "gsuite_survey_type_group_complete")
-  private LocalDateTime gsuiteSurveyTypeGroupComplete;
+  private String gsuiteSurveyTypeGroupComplete;
 
   @Column(name = "gsuite_team_drive_start")
-  private LocalDateTime gsuiteTeamDriveStart;
+  private String gsuiteTeamDriveStart;
 
   @Column(name = "gsuite_team_drive_complete")
-  private LocalDateTime gsuiteTeamDriveComplete;
+  private String gsuiteTeamDriveComplete;
 
   @Column(name = "xma_start")
-  private LocalDateTime xmaStart;
+  private String xmaStart;
 
   @Column(name = "xma_complete")
-  private LocalDateTime xmaComplete;
+  private String xmaComplete;
 
   @Column(name = "xma_devices_start")
-  private LocalDateTime xmaDevicesStart;
+  private String xmaDevicesStart;
 
   @Column(name = "xma_devices_complete")
-  private LocalDateTime xmaDevicesComplete;
+  private String xmaDevicesComplete;
 
   @Column(name = "granby_start")
-  private LocalDateTime granbyStart;
+  private String granbyStart;
 
   @Column(name = "granby_complete")
-  private LocalDateTime granbyComplete;
+  private String granbyComplete;
 
   @Column(name = "snow_start")
-  private LocalDateTime snowStart;
+  private String snowStart;
 
   @Column(name = "snow_complete")
-  private LocalDateTime snowComplete;
+  private String snowComplete;
 
   @Column(name = "rca_start")
-  private LocalDateTime rcaStart;
+  private String rcaStart;
 
   @Column(name = "rca_complete")
-  private LocalDateTime rcaComplete;
+  private String rcaComplete;
 
   @Column(name = "lws_start")
-  private LocalDateTime lwsStart;
+  private String lwsStart;
 
   @Column(name = "lws_complete")
-  private LocalDateTime lwsComplete;
+  private String lwsComplete;
 
   public Report(String uniqueEmployeeId) {
     this.uniqueEmployeeId = uniqueEmployeeId;
