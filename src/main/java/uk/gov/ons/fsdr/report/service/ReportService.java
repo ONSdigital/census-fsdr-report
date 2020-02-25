@@ -39,11 +39,7 @@ public class ReportService {
   }
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
-    String ts = gatewayEventDTO.getMetadata().get("TS");
-    LocalDateTime eventTime = null;
-    if (ts != null) {
-      eventTime = LocalDateTime.parse(ts);
-    }
+    String eventTime = gatewayEventDTO.getMetadata().get("TS");
     switch (gatewayEventDTO.getEventType()) {
     case "JOB_TYPE":
       report.setJobTitle(gatewayEventDTO.getMetadata().get("JobRole Type"));
