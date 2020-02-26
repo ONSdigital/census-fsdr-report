@@ -1,6 +1,7 @@
 package uk.gov.ons.fsdr.report.service;
 
 import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.ons.fsdr.report.entity.Report;
@@ -12,12 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CsvService {
 
   @Autowired
   private ReportRepository reportRepository;
 
   public String buildCsv() throws IOException {
+    log.debug("building csv");
     final Report nonEmployeeActionsTime = reportRepository.findById("<N/A>").orElseThrow();
     final List<Report> employeesTimes = reportRepository.findAllByUniqueEmployeeIdNot("<N/A>");
     List<String[]> csvRows = new ArrayList<>();
@@ -39,47 +42,47 @@ public class CsvService {
   private String[] buildCsvRow(Report employeesTime, Report actionsTime) {
     String[] times = new String[42];
     times[0] = employeesTime.getUniqueEmployeeId();
-    times[1] = String.valueOf(actionsTime.getStartTime());
+    times[1] = actionsTime.getStartTime();
     times[2] = employeesTime.getJobTitle();
-    times[3] = String.valueOf(employeesTime.getIngestTime());
-    times[4] = String.valueOf(actionsTime.getAdeccoIngestStart());
-    times[5] = String.valueOf(actionsTime.getAdeccoIngestComplete());
-    times[6] = String.valueOf(employeesTime.getAdeccoCreateEmployeeStart());
-    times[7] = String.valueOf(employeesTime.getAdeccoCreateEmployeeComplete());
-    times[8] = String.valueOf(actionsTime.getNisraIngestCsvStart());
-    times[9] = String.valueOf(actionsTime.getNisraIngestCsvComplete());
-    times[10] = String.valueOf(employeesTime.getNisraCreateEmployeeStart());
-    times[11] = String.valueOf(employeesTime.getNisraCreateEmployeeComplete());
-    times[12] = String.valueOf(actionsTime.getNisraExtractStart());
-    times[13] = String.valueOf(actionsTime.getNisraExtractComplete());
-    times[14] = String.valueOf(actionsTime.getActionsStart());
-    times[15] = String.valueOf(actionsTime.getActionsComplete());
-    times[16] = String.valueOf(employeesTime.getGsuiteActionStart());
-    times[17] = String.valueOf(employeesTime.getGsuiteActionComplete());
-    times[18] = String.valueOf(employeesTime.getGsuiteCreateStart());
-    times[19] = String.valueOf(employeesTime.getGsuiteCreateComplete());
-    times[20] = String.valueOf(employeesTime.getGsuiteAreaGroupStart());
-    times[21] = String.valueOf(employeesTime.getGsuiteAreaGroupComplete());
-    times[22] = String.valueOf(employeesTime.getGsuiteCoordinatorGroupStart());
-    times[23] = String.valueOf(employeesTime.getGsuiteCoordinatorGroupComplete());
-    times[24] = String.valueOf(employeesTime.getGsuiteAllUserGroupStart());
-    times[25] = String.valueOf(employeesTime.getGsuiteAllUserGroupComplete());
-    times[26] = String.valueOf(employeesTime.getGsuiteSurveyTypeGroupStart());
-    times[27] = String.valueOf(employeesTime.getGsuiteSurveyTypeGroupComplete());
-    times[28] = String.valueOf(employeesTime.getGsuiteTeamDriveStart());
-    times[29] = String.valueOf(employeesTime.getGsuiteTeamDriveComplete());
-    times[30] = String.valueOf(employeesTime.getXmaStart());
-    times[31] = String.valueOf(employeesTime.getXmaComplete());
-    times[32] = String.valueOf(actionsTime.getXmaDevicesStart());
-    times[33] = String.valueOf(actionsTime.getXmaDevicesComplete());
-    times[34] = String.valueOf(actionsTime.getGranbyStart());
-    times[35] = String.valueOf(actionsTime.getGranbyComplete());
-    times[36] = String.valueOf(employeesTime.getSnowStart());
-    times[37] = String.valueOf(employeesTime.getSnowComplete());
-    times[38] = String.valueOf(actionsTime.getRcaStart());
-    times[39] = String.valueOf(actionsTime.getRcaComplete());
-    times[40] = String.valueOf(actionsTime.getLwsStart());
-    times[41] = String.valueOf(actionsTime.getLwsComplete());
+    times[3] = employeesTime.getIngestTime();
+    times[4] = actionsTime.getAdeccoIngestStart();
+    times[5] = actionsTime.getAdeccoIngestComplete();
+    times[6] = employeesTime.getAdeccoCreateEmployeeStart();
+    times[7] = employeesTime.getAdeccoCreateEmployeeComplete();
+    times[8] = actionsTime.getNisraIngestCsvStart();
+    times[9] = actionsTime.getNisraIngestCsvComplete();
+    times[10] = employeesTime.getNisraCreateEmployeeStart();
+    times[11] = employeesTime.getNisraCreateEmployeeComplete();
+    times[12] = actionsTime.getNisraExtractStart();
+    times[13] = actionsTime.getNisraExtractComplete();
+    times[14] = actionsTime.getActionsStart();
+    times[15] = actionsTime.getActionsComplete();
+    times[16] = employeesTime.getGsuiteActionStart();
+    times[17] = employeesTime.getGsuiteActionComplete();
+    times[18] = employeesTime.getGsuiteCreateStart();
+    times[19] = employeesTime.getGsuiteCreateComplete();
+    times[20] = employeesTime.getGsuiteAreaGroupStart();
+    times[21] = employeesTime.getGsuiteAreaGroupComplete();
+    times[22] = employeesTime.getGsuiteCoordinatorGroupStart();
+    times[23] = employeesTime.getGsuiteCoordinatorGroupComplete();
+    times[24] = employeesTime.getGsuiteAllUserGroupStart();
+    times[25] = employeesTime.getGsuiteAllUserGroupComplete();
+    times[26] = employeesTime.getGsuiteSurveyTypeGroupStart();
+    times[27] = employeesTime.getGsuiteSurveyTypeGroupComplete();
+    times[28] = employeesTime.getGsuiteTeamDriveStart();
+    times[29] = employeesTime.getGsuiteTeamDriveComplete();
+    times[30] = employeesTime.getXmaStart();
+    times[31] = employeesTime.getXmaComplete();
+    times[32] = actionsTime.getXmaDevicesStart();
+    times[33] = actionsTime.getXmaDevicesComplete();
+    times[34] = actionsTime.getGranbyStart();
+    times[35] = actionsTime.getGranbyComplete();
+    times[36] = employeesTime.getSnowStart();
+    times[37] = employeesTime.getSnowComplete();
+    times[38] = actionsTime.getRcaStart();
+    times[39] = actionsTime.getRcaComplete();
+    times[40] = actionsTime.getLwsStart();
+    times[41] = actionsTime.getLwsComplete();
     return times;
   }
 
