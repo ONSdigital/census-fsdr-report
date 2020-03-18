@@ -33,7 +33,7 @@ public class ReportService {
   }
 
   @RabbitHandler
-  public void readMessage(GatewayEventDTO event) {
+  public void readMessage(GatewayEventDTO event) throws InterruptedException {
 
     String caseId = event.getCaseId();
     log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
@@ -41,7 +41,7 @@ public class ReportService {
     updateReport(report, event);
   }
 
-  private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
+  private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) throws InterruptedException {
     String eventTime = gatewayEventDTO.getMetadata().get("TS");
     switch (gatewayEventDTO.getEventType()) {
     case "JOB_TYPE":
@@ -178,6 +178,7 @@ public class ReportService {
       report.setActionType(ActionType.LEAVER);
       break;
     case "FSDR_PROCESS_COMPLETE":
+      Thread.sleep(30000);
       eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
     default:
       return;

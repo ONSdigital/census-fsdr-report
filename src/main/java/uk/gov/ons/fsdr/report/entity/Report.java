@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "report")
@@ -145,6 +146,10 @@ public class Report {
 
   @Column(name = "lws_complete")
   private String lwsComplete;
+
+  @Version
+  @Column(name = "VERSION", columnDefinition = "integer DEFAULT 0", nullable = false)
+  private long version;
 
   public Report(String uniqueEmployeeId) {
     this.uniqueEmployeeId = uniqueEmployeeId;

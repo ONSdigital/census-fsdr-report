@@ -18,9 +18,16 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+    listener:
+      simple:
+        concurrency: 10
+  jpa:
+    hibernate:
+      ddl-auto: update
 logging:
   level:
     uk.gov.ons.fsdr.report: DEBUG
     org.springframework.amqp: WARN
     org.hibernate: WARN
+    org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler: ERROR
 
