@@ -31,3 +31,5 @@ logging:
     org.hibernate: WARN
     org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler: ERROR
 
+report:
+  timeout: 120000

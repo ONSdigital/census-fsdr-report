@@ -5,6 +5,7 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.ons.census.fwmt.events.component.GatewayEventManager;
 import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
@@ -12,8 +13,6 @@ import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
 import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
-
-import java.util.function.Supplier;
 
 import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
@@ -31,6 +30,9 @@ public class ReportService {
 
   @Autowired
   private AmqpAdmin rabbitAdmin;
+
+  @Value("${report.timeout}")
+  private long timeToWait;
 
   @RabbitHandler
   public void readMessage(GatewayErrorEventDTO event) {
@@ -184,12 +186,13 @@ public class ReportService {
       report.setActionType(ActionType.LEAVER);
       break;
     case "FSDR_PROCESS_COMPLETE":
-      boolean retryResult = checkEventQueue(120000l);
+      boolean retryResult = checkEventQueue(timeToWait);
       if (retryResult) {
         eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
       }
       else {
-        log.error("event queue did not finish processing in 2 minutes, report may need to be generated manually");
+        log.error("event queue did not finish processing in {}ms, report may need to be generated manually",
+            timeToWait);
       }
     default:
       return;
