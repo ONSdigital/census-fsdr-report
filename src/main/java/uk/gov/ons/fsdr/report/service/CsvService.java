@@ -94,7 +94,7 @@ public class CsvService {
     header[2] = "job title";
     header[3] = "ingest time";
     header[4] = "adecco ingest start time";
-    header[5] = "adecco ingest start time";
+    header[5] = "adecco ingest complete time";
     header[6] = "adecco create employee start time";
     header[7] = "adecco create employee end time";
     header[8] = "nisra ingest csv start time";

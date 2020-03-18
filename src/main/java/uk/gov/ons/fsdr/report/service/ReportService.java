@@ -55,6 +55,9 @@ public class ReportService {
     case "JOB_TYPE":
       report.setJobTitle(gatewayEventDTO.getMetadata().get("JobRole Type"));
       break;
+    case "FSDR_PROCESS_STARTED":
+      report.setStartTime(eventTime);
+      break;
     case "GSUITE_ACTION_STARTED":
       report.setGsuiteActionStart(eventTime);
       break;
@@ -106,7 +109,6 @@ public class ReportService {
       break;
     case "ADECCO_INGEST_STARTED":
       report.setAdeccoIngestStart(eventTime);
-      report.setStartTime(eventTime);
       break;
     case "ADECCO_INGEST_COMPLETE":
       report.setAdeccoIngestComplete(eventTime);
@@ -156,7 +158,6 @@ public class ReportService {
       break;
     case "NISRA_INGEST_STARTED":
       report.setNisraIngestCsvStart(eventTime);
-      report.setStartTime(eventTime);
       break;
     case "NISRA_INGEST_COMPLETE":
       report.setNisraIngestCsvComplete(eventTime);
@@ -189,8 +190,7 @@ public class ReportService {
       boolean retryResult = checkEventQueue(timeToWait);
       if (retryResult) {
         eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
-      }
-      else {
+      } else {
         log.error("event queue did not finish processing in {}ms, report may need to be generated manually",
             timeToWait);
       }
@@ -212,7 +212,7 @@ public class ReportService {
     while (keepChecking) {
       boolean result = checkIfQueueEmpty();
 
-      if (result){
+      if (result) {
         return true;
       }
 
