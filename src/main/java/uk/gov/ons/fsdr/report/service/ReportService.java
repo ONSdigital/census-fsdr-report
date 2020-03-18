@@ -1,6 +1,7 @@
 package uk.gov.ons.fsdr.report.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
 import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
+
+import java.util.function.Supplier;
 
 import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
@@ -25,6 +28,9 @@ public class ReportService {
 
   @Autowired
   private GatewayEventManager eventManager;
+
+  @Autowired
+  private AmqpAdmin rabbitAdmin;
 
   @RabbitHandler
   public void readMessage(GatewayErrorEventDTO event) {
@@ -178,11 +184,46 @@ public class ReportService {
       report.setActionType(ActionType.LEAVER);
       break;
     case "FSDR_PROCESS_COMPLETE":
-      Thread.sleep(30000);
-      eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
+      boolean retryResult = checkEventQueue(120000l);
+      if (retryResult) {
+        eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
+      }
+      else {
+        log.error("event queue did not finish processing in 2 minutes, report may need to be generated manually");
+      }
     default:
       return;
     }
     reportRepository.saveAndFlush(report);
+  }
+
+  private boolean checkIfQueueEmpty() {
+    int eventQueueCount = (int) rabbitAdmin.getQueueProperties(EVENTS_QUEUE).get("QUEUE_MESSAGE_COUNT");
+    return eventQueueCount == 0;
+  }
+
+  private boolean checkEventQueue(long timeout) {
+    long startTime = System.currentTimeMillis();
+    boolean keepChecking = true;
+
+    while (keepChecking) {
+      boolean result = checkIfQueueEmpty();
+
+      if (result){
+        return true;
+      }
+
+      long elapsedTime = System.currentTimeMillis() - startTime;
+      if (elapsedTime > timeout) {
+        keepChecking = false;
+      } else {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return false;
   }
 }
