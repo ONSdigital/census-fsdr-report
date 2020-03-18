@@ -45,7 +45,8 @@ public class ReportService {
 
     String caseId = event.getCaseId();
     log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
-    Report report = reportRepository.findById(caseId).orElse(new Report(caseId));
+    Report report = reportRepository.findById(caseId)
+        .orElseGet(() -> reportRepository.saveAndFlush(new Report(caseId)));
     updateReport(report, event);
   }
 
