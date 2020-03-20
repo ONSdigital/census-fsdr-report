@@ -1,9 +1,11 @@
 package uk.gov.ons.fsdr.report.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.ons.census.fwmt.events.component.GatewayEventManager;
 import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
@@ -26,6 +28,12 @@ public class ReportService {
   @Autowired
   private GatewayEventManager eventManager;
 
+  @Autowired
+  private AmqpAdmin rabbitAdmin;
+
+  @Value("${report.timeout}")
+  private long timeToWait;
+
   @RabbitHandler
   public void readMessage(GatewayErrorEventDTO event) {
     //this method is intentionally empty so that spring doesn't throw an exception
@@ -37,7 +45,8 @@ public class ReportService {
 
     String caseId = event.getCaseId();
     log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
-    Report report = reportRepository.findById(caseId).orElse(new Report(caseId));
+    Report report = reportRepository.findById(caseId)
+        .orElseGet(() -> reportRepository.saveAndFlush(new Report(caseId)));
     updateReport(report, event);
   }
 
@@ -46,6 +55,9 @@ public class ReportService {
     switch (gatewayEventDTO.getEventType()) {
     case "JOB_TYPE":
       report.setJobTitle(gatewayEventDTO.getMetadata().get("JobRole Type"));
+      break;
+    case "FSDR_PROCESS_STARTED":
+      report.setStartTime(eventTime);
       break;
     case "GSUITE_ACTION_STARTED":
       report.setGsuiteActionStart(eventTime);
@@ -98,7 +110,6 @@ public class ReportService {
       break;
     case "ADECCO_INGEST_STARTED":
       report.setAdeccoIngestStart(eventTime);
-      report.setStartTime(eventTime);
       break;
     case "ADECCO_INGEST_COMPLETE":
       report.setAdeccoIngestComplete(eventTime);
@@ -148,7 +159,6 @@ public class ReportService {
       break;
     case "NISRA_INGEST_STARTED":
       report.setNisraIngestCsvStart(eventTime);
-      report.setStartTime(eventTime);
       break;
     case "NISRA_INGEST_COMPLETE":
       report.setNisraIngestCsvComplete(eventTime);
@@ -178,10 +188,46 @@ public class ReportService {
       report.setActionType(ActionType.LEAVER);
       break;
     case "FSDR_PROCESS_COMPLETE":
-      eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
+      boolean retryResult = checkEventQueue(timeToWait);
+      if (retryResult) {
+        eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
+      } else {
+        log.error("event queue did not finish processing in {}ms, report may need to be generated manually",
+            timeToWait);
+      }
     default:
       return;
     }
     reportRepository.saveAndFlush(report);
+  }
+
+  private boolean checkIfQueueEmpty() {
+    int eventQueueCount = (int) rabbitAdmin.getQueueProperties(EVENTS_QUEUE).get("QUEUE_MESSAGE_COUNT");
+    return eventQueueCount == 0;
+  }
+
+  private boolean checkEventQueue(long timeout) {
+    long startTime = System.currentTimeMillis();
+    boolean keepChecking = true;
+
+    while (keepChecking) {
+      boolean result = checkIfQueueEmpty();
+
+      if (result) {
+        return true;
+      }
+
+      long elapsedTime = System.currentTimeMillis() - startTime;
+      if (elapsedTime > timeout) {
+        keepChecking = false;
+      } else {
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return false;
   }
 }
