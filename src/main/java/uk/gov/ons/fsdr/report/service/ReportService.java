@@ -41,7 +41,7 @@ public class ReportService {
   }
 
   @RabbitHandler
-  public void readMessage(GatewayEventDTO event) throws InterruptedException {
+  public void readMessage(GatewayEventDTO event) {
 
     String caseId = event.getCaseId();
     log.debug("processing event: {} for ID: {}", event.getEventType(), caseId);
@@ -50,7 +50,7 @@ public class ReportService {
     updateReport(report, event);
   }
 
-  private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) throws InterruptedException {
+  private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
     String eventTime = gatewayEventDTO.getMetadata().get("TS");
     switch (gatewayEventDTO.getEventType()) {
     case "JOB_TYPE":
@@ -201,12 +201,12 @@ public class ReportService {
     reportRepository.saveAndFlush(report);
   }
 
-  private boolean checkIfQueueEmpty() throws InterruptedException {
+  private boolean checkIfQueueEmpty() {
     int eventQueueCount = (int) rabbitAdmin.getQueueProperties(EVENTS_QUEUE).get("QUEUE_MESSAGE_COUNT");
     return eventQueueCount == 0;
   }
 
-  private boolean checkEventQueue(long timeout) throws InterruptedException {
+  private boolean checkEventQueue(long timeout) {
     long startTime = System.currentTimeMillis();
     boolean keepChecking = true;
 
