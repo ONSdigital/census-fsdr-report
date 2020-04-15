@@ -59,10 +59,10 @@ public class ReportService {
     case "FSDR_PROCESS_STARTED":
       report.setStartTime(eventTime);
       break;
-    case "GSUITE_ACTION_STARTED":
+    case "RECEIVED_GSUITE_ACTION_MESSAGE":
       report.setGsuiteActionStart(eventTime);
       break;
-    case "GSUITE_ACTION_COMPLETE":
+    case "SENDING_GSUITE_ACTION_RESPONSE":
       report.setGsuiteActionComplete(eventTime);
       break;
     case "GSUITE_USER_CREATE_STARTED":
@@ -121,16 +121,16 @@ public class ReportService {
     case "NISRA_CREATION_COMPLETE":
       report.setNisraCreateEmployeeComplete(eventTime);
       break;
-    case "SERVICENOW_ACTION_STARTED":
+    case "RECEIVED_SNOW_ACTION_MESSAGE":
       report.setSnowStart(eventTime);
       break;
-    case "SERVICENOW_ACTION_COMPLETE":
+    case "SENDING_SERVICE_NOW_ACTION_RESPONSE":
       report.setSnowComplete(eventTime);
       break;
-    case "XMA_ACTION_STARTED":
+    case "RECEIVED_XMA_ACTION_MESSAGE":
       report.setXmaStart(eventTime);
       break;
-    case "XMA_ACTION_COMPLETE":
+    case "SENDING_XMA_ACTION_RESPONSE":
       report.setXmaComplete(eventTime);
       break;
     case "FSDR_PROCESSES_ACTIONS_STARTED":
@@ -145,10 +145,10 @@ public class ReportService {
     case "NISRA_EXTRACT_COMPLETE":
       report.setNisraExtractComplete(eventTime);
       break;
-    case "LWS_EXTRACT_STARTED":
+    case "RECEIVED_LWS_ACTION_MESSAGE":
       report.setLwsStart(eventTime);
       break;
-    case "LWS_EXTRACT_COMPLETE":
+    case "SENDING_LWS_ACTION_RESPONSE":
       report.setLwsComplete(eventTime);
       break;
     case "XMA_DEVICES_STARTED":
@@ -187,7 +187,7 @@ public class ReportService {
     case "CREATED_LEAVER_ACTION":
       report.setActionType(ActionType.LEAVER);
       break;
-    case "FSDR_PROCESS_COMPLETE":
+    case "FSDR_COMPLETE":
       boolean retryResult = checkEventQueue(timeToWait);
       if (retryResult) {
         eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
