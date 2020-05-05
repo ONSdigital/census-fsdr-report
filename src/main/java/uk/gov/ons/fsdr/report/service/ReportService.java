@@ -17,6 +17,10 @@ import uk.gov.ons.fsdr.report.repository.ReportRepository;
 import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service
 @RabbitListener(queues = EVENTS_QUEUE)
 @Slf4j
@@ -52,6 +56,7 @@ public class ReportService {
 
   private void updateReport(Report report, GatewayEventDTO gatewayEventDTO) {
     String eventTime = gatewayEventDTO.getMetadata().get("TS");
+
     switch (gatewayEventDTO.getEventType()) {
     case "JOB_TYPE":
       report.setJobTitle(gatewayEventDTO.getMetadata().get("JobRole Type"));
@@ -230,4 +235,8 @@ public class ReportService {
     }
     return false;
   }
+
+
+
+
 }

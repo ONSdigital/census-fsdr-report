@@ -9,7 +9,10 @@ import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -18,6 +21,12 @@ public class CsvService {
 
   @Autowired
   private ReportRepository reportRepository;
+
+  private static SimpleDateFormat oSDF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+  private static SimpleDateFormat csvSDF = new SimpleDateFormat("HH:mm:ss");
+
+
 
   public String buildCsv() throws IOException {
     log.debug("building csv");
@@ -33,7 +42,7 @@ public class CsvService {
 
   private String buildCsv(List<String[]> csvRows) throws IOException {
     StringWriter writer = new StringWriter();
-    try (CSVWriter csvWriter = new CSVWriter(writer, ',', '"', '\\', "\n")) {
+    try (CSVWriter csvWriter = new CSVWriter(writer, ',', CSVWriter.NO_QUOTE_CHARACTER, '\\', "\n")) {
       csvWriter.writeAll(csvRows);
       return writer.toString();
     }
@@ -42,47 +51,47 @@ public class CsvService {
   private String[] buildCsvRow(Report employeesTime, Report actionsTime) {
     String[] times = new String[42];
     times[0] = employeesTime.getUniqueEmployeeId();
-    times[1] = actionsTime.getStartTime();
-    times[2] = employeesTime.getJobTitle();
-    times[3] = employeesTime.getIngestTime();
-    times[4] = actionsTime.getAdeccoIngestStart();
-    times[5] = actionsTime.getAdeccoIngestComplete();
-    times[6] = employeesTime.getAdeccoCreateEmployeeStart();
-    times[7] = employeesTime.getAdeccoCreateEmployeeComplete();
-    times[8] = actionsTime.getNisraIngestCsvStart();
-    times[9] = actionsTime.getNisraIngestCsvComplete();
-    times[10] = employeesTime.getNisraCreateEmployeeStart();
-    times[11] = employeesTime.getNisraCreateEmployeeComplete();
-    times[12] = actionsTime.getNisraExtractStart();
-    times[13] = actionsTime.getNisraExtractComplete();
-    times[14] = actionsTime.getActionsStart();
-    times[15] = actionsTime.getActionsComplete();
-    times[16] = employeesTime.getGsuiteActionStart();
-    times[17] = employeesTime.getGsuiteActionComplete();
-    times[18] = employeesTime.getGsuiteCreateStart();
-    times[19] = employeesTime.getGsuiteCreateComplete();
-    times[20] = employeesTime.getGsuiteAreaGroupStart();
-    times[21] = employeesTime.getGsuiteAreaGroupComplete();
-    times[22] = employeesTime.getGsuiteCoordinatorGroupStart();
-    times[23] = employeesTime.getGsuiteCoordinatorGroupComplete();
-    times[24] = employeesTime.getGsuiteAllUserGroupStart();
-    times[25] = employeesTime.getGsuiteAllUserGroupComplete();
-    times[26] = employeesTime.getGsuiteSurveyTypeGroupStart();
-    times[27] = employeesTime.getGsuiteSurveyTypeGroupComplete();
-    times[28] = employeesTime.getGsuiteTeamDriveStart();
-    times[29] = employeesTime.getGsuiteTeamDriveComplete();
-    times[30] = employeesTime.getXmaStart();
-    times[31] = employeesTime.getXmaComplete();
-    times[32] = actionsTime.getXmaDevicesStart();
-    times[33] = actionsTime.getXmaDevicesComplete();
-    times[34] = actionsTime.getGranbyStart();
-    times[35] = actionsTime.getGranbyComplete();
-    times[36] = employeesTime.getSnowStart();
-    times[37] = employeesTime.getSnowComplete();
-    times[38] = actionsTime.getRcaStart();
-    times[39] = actionsTime.getRcaComplete();
-    times[40] = actionsTime.getLwsStart();
-    times[41] = actionsTime.getLwsComplete();
+    times[1] = employeesTime.getJobTitle();
+    times[2] = formateDate(actionsTime.getStartTime());
+    times[3] = formateDate(employeesTime.getIngestTime());
+    times[4] = formateDate(actionsTime.getAdeccoIngestStart());
+    times[5] = formateDate(actionsTime.getAdeccoIngestComplete());
+    times[6] = formateDate(employeesTime.getAdeccoCreateEmployeeStart());
+    times[7] = formateDate(employeesTime.getAdeccoCreateEmployeeComplete());
+    times[8] = formateDate(actionsTime.getNisraIngestCsvStart());
+    times[9] = formateDate(actionsTime.getNisraIngestCsvComplete());
+    times[10] = formateDate(employeesTime.getNisraCreateEmployeeStart());
+    times[11] = formateDate(employeesTime.getNisraCreateEmployeeComplete());
+    times[12] = formateDate(actionsTime.getNisraExtractStart());
+    times[13] = formateDate(actionsTime.getNisraExtractComplete());
+    times[14] = formateDate(actionsTime.getActionsStart());
+    times[15] = formateDate(actionsTime.getActionsComplete());
+    times[16] = formateDate(employeesTime.getGsuiteActionStart());
+    times[17] = formateDate(employeesTime.getGsuiteActionComplete());
+    times[18] = formateDate(employeesTime.getGsuiteCreateStart());
+    times[19] = formateDate(employeesTime.getGsuiteCreateComplete());
+    times[20] = formateDate(employeesTime.getGsuiteAreaGroupStart());
+    times[21] = formateDate(employeesTime.getGsuiteAreaGroupComplete());
+    times[22] = formateDate(employeesTime.getGsuiteCoordinatorGroupStart());
+    times[23] = formateDate(employeesTime.getGsuiteCoordinatorGroupComplete());
+    times[24] = formateDate(employeesTime.getGsuiteAllUserGroupStart());
+    times[25] = formateDate(employeesTime.getGsuiteAllUserGroupComplete());
+    times[26] = formateDate(employeesTime.getGsuiteSurveyTypeGroupStart());
+    times[27] = formateDate(employeesTime.getGsuiteSurveyTypeGroupComplete());
+    times[28] = formateDate(employeesTime.getGsuiteTeamDriveStart());
+    times[29] = formateDate(employeesTime.getGsuiteTeamDriveComplete());
+    times[30] = formateDate(employeesTime.getXmaStart());
+    times[31] = formateDate(employeesTime.getXmaComplete());
+    times[32] = formateDate(actionsTime.getXmaDevicesStart());
+    times[33] = formateDate(actionsTime.getXmaDevicesComplete());
+    times[34] = formateDate(actionsTime.getGranbyStart());
+    times[35] = formateDate(actionsTime.getGranbyComplete());
+    times[36] = formateDate(employeesTime.getSnowStart());
+    times[37] = formateDate(employeesTime.getSnowComplete());
+    times[38] = formateDate(actionsTime.getRcaStart());
+    times[39] = formateDate(actionsTime.getRcaComplete());
+    times[40] = formateDate(actionsTime.getLwsStart());
+    times[41] = formateDate(actionsTime.getLwsComplete());
     return times;
   }
 
@@ -90,8 +99,8 @@ public class CsvService {
     String[] header = new String[42];
 
     header[0] = "employee ID";
-    header[1] = "start time";
-    header[2] = "job title";
+    header[1] = "job title";
+    header[2] = "start time";
     header[3] = "ingest time";
     header[4] = "adecco ingest start time";
     header[5] = "adecco ingest complete time";
@@ -135,4 +144,20 @@ public class CsvService {
     return header;
   }
 
+  private String formateDate(String sd) {
+    if (sd==null)
+      return "";
+    var o = sd.substring(0, 19);
+
+    Date date;
+    try {
+      date = oSDF.parse(o);
+      return csvSDF.format(date);
+    } catch (ParseException e) {
+      log.error("Could not parse date:" + sd, e);
+      return "'" + sd + "'";
+    }
+
+
+  }
 }
