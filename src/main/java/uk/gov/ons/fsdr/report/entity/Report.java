@@ -130,10 +130,10 @@ public class Report {
   private String granbyComplete;
 
   @Column(name = "snow_start")
-  private String snowStart;
+  private String serviceNowStart;
 
   @Column(name = "snow_complete")
-  private String snowComplete;
+  private String serviceNowComplete;
 
   @Column(name = "rca_start")
   private String rcaStart;

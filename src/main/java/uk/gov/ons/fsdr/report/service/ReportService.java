@@ -17,10 +17,6 @@ import uk.gov.ons.fsdr.report.repository.ReportRepository;
 import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
 import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service
 @RabbitListener(queues = EVENTS_QUEUE)
 @Slf4j
@@ -126,11 +122,11 @@ public class ReportService {
     case "NISRA_CREATION_COMPLETE":
       report.setNisraCreateEmployeeComplete(eventTime);
       break;
-    case "RECEIVED_SNOW_ACTION_MESSAGE":
-      report.setSnowStart(eventTime);
+    case "RECEIVED_SERVICE_NOW_ACTION_MESSAGE":
+      report.setServiceNowStart(eventTime);
       break;
     case "SENDING_SERVICE_NOW_ACTION_RESPONSE":
-      report.setSnowComplete(eventTime);
+      report.setServiceNowComplete(eventTime);
       break;
     case "RECEIVED_XMA_ACTION_MESSAGE":
       report.setXmaStart(eventTime);
