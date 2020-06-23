@@ -86,8 +86,8 @@ public class CsvService {
     times[33] = formateDate(actionsTime.getXmaDevicesComplete());
     times[34] = formateDate(actionsTime.getGranbyStart());
     times[35] = formateDate(actionsTime.getGranbyComplete());
-    times[36] = formateDate(employeesTime.getSnowStart());
-    times[37] = formateDate(employeesTime.getSnowComplete());
+    times[36] = formateDate(employeesTime.getServiceNowStart());
+    times[37] = formateDate(employeesTime.getServiceNowComplete());
     times[38] = formateDate(actionsTime.getRcaStart());
     times[39] = formateDate(actionsTime.getRcaComplete());
     times[40] = formateDate(actionsTime.getLwsStart());
@@ -134,8 +134,8 @@ public class CsvService {
     header[33] = "xma devices complete time";
     header[34] = "granby extract start time";
     header[35] = "granby extract complete time";
-    header[36] = "snow extract start time";
-    header[37] = "snow extract complete time";
+    header[36] = "service now extract start time";
+    header[37] = "service extract complete time";
     header[38] = "rca extract start time";
     header[39] = "rca extract complete time";
     header[40] = "lws extract start time";
