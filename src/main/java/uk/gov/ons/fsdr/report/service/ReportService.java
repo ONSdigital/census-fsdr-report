@@ -1,24 +1,28 @@
 package uk.gov.ons.fsdr.report.service;
 
-import lombok.extern.slf4j.Slf4j;
+import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
+import static uk.gov.ons.fsdr.report.config.EventQueueConfig.EVENTS_TOPIC_QUEUE;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import uk.gov.ons.census.fwmt.events.component.GatewayEventManager;
+
+import lombok.extern.slf4j.Slf4j;
 import uk.gov.ons.census.fwmt.events.data.GatewayErrorEventDTO;
 import uk.gov.ons.census.fwmt.events.data.GatewayEventDTO;
+import uk.gov.ons.census.fwmt.events.factory.EventTrigger;
+import uk.gov.ons.census.fwmt.events.factory.EventTriggerFactory;
 import uk.gov.ons.fsdr.report.entity.ActionType;
 import uk.gov.ons.fsdr.report.entity.Report;
 import uk.gov.ons.fsdr.report.repository.ReportRepository;
 
-import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
-import static uk.gov.ons.fsdr.report.config.eventQueueConfig.EVENTS_QUEUE;
-
 @Service
-@RabbitListener(queues = EVENTS_QUEUE)
+@RabbitListener(queues = {EVENTS_TOPIC_QUEUE})
 @Slf4j
 public class ReportService {
 
@@ -26,14 +30,23 @@ public class ReportService {
   private ReportRepository reportRepository;
 
   @Autowired
-  private GatewayEventManager eventManager;
-
-  @Autowired
   private AmqpAdmin rabbitAdmin;
 
   @Value("${report.timeout}")
   private long timeToWait;
 
+  @Autowired
+  private EventTriggerFactory eventTriggerFactory;
+  
+  private EventTrigger eventTrigger;
+  
+  @PostConstruct
+  public void setUpEventTrigger() {
+	  eventTrigger = eventTriggerFactory.createEventTrigger(this.getClass(), "MOCK.FSDR");
+  }
+
+  
+  
   @RabbitHandler
   public void readMessage(GatewayErrorEventDTO event) {
     //this method is intentionally empty so that spring doesn't throw an exception
@@ -191,7 +204,8 @@ public class ReportService {
     case "FSDR_COMPLETE":
       boolean retryResult = checkEventQueue(timeToWait);
       if (retryResult) {
-        eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
+        eventTrigger.test(null).eventType(FSDR_REPORT_READY).send();
+        //eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
       } else {
         log.error("event queue did not finish processing in {}ms, report may need to be generated manually",
             timeToWait);
@@ -203,7 +217,7 @@ public class ReportService {
   }
 
   private boolean checkIfQueueEmpty() {
-    int eventQueueCount = (int) rabbitAdmin.getQueueProperties(EVENTS_QUEUE).get("QUEUE_MESSAGE_COUNT");
+    int eventQueueCount = (int) rabbitAdmin.getQueueProperties(EVENTS_TOPIC_QUEUE).get("QUEUE_MESSAGE_COUNT");
     return eventQueueCount == 0;
   }
 
