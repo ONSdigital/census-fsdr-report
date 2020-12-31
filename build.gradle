@@ -38,7 +38,7 @@ repositories {
 }
 
 dependencies {
-    compile('uk.gov.ons.census.ffa:census-ffa-events:1.0.0-SNAPSHOT') {
+    compile('uk.gov.ons.census.ffa:census-ffa-events:1.0.42-RELEASE') {
         exclude group: 'com.fasterxml.jackson.dataformat', module: 'jackson-dataformat-xml'
     }
 //    compile('uk.gov.ons.census.fwmt:census-fwmt-events:1.0.40-SNAPSHOT') {

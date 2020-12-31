@@ -1,6 +1,6 @@
 package uk.gov.ons.fsdr.report.service;
 
-import static uk.gov.ons.fsdr.report.config.GatewayEventsConfig.FSDR_REPORT_READY;
+import static uk.gov.ons.fsdr.report.config.EventQueueConfig.FSDR_REPORT_READY;
 import static uk.gov.ons.fsdr.report.config.EventQueueConfig.EVENTS_TOPIC_QUEUE;
 
 import javax.annotation.PostConstruct;
@@ -204,7 +204,7 @@ public class ReportService {
     case "FSDR_COMPLETE":
       boolean retryResult = checkEventQueue(timeToWait);
       if (retryResult) {
-        eventTrigger.test(null).eventType(FSDR_REPORT_READY).send();
+        eventTrigger.log(null).eventType(FSDR_REPORT_READY).send();
         //eventManager.triggerEvent("<N/A>", FSDR_REPORT_READY);
       } else {
         log.error("event queue did not finish processing in {}ms, report may need to be generated manually",

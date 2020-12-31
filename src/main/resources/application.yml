@@ -25,6 +25,7 @@ spring:
     hibernate:
       ddl-auto: update
 logging:
+  profile: DEV
   level:
     uk.gov.ons.fsdr.report: DEBUG
     org.springframework.amqp: WARN

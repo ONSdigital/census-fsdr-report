@@ -21,6 +21,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class EventQueueConfig {
 	  public static final String EVENTS_TOPIC_QUEUE = "Report.Events";
 	  public static final String FFA_EVENTS_EXCHANGE = "FFA.Events.Exchange";
+	  public static final String FSDR_REPORT_READY = "FSDR_REPORT_READY";
 
   @Bean
   public AmqpAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
